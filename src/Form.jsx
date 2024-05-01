@@ -7,7 +7,7 @@ import axios from "axios";
 
 let userSchema = yup.object({
   name: yup.string().required("name is required"),
-  phn_no: yup.string().required("Phone number is required"),
+  email: yup.string().required("Phone number is required"),
   password: yup.string().required("password is required"),
 });
 const Form = () => {
@@ -21,7 +21,7 @@ const Form = () => {
   const onSubmit = async (data) => {
     try {
       const createUser = await axios.post(
-        "http://localhost:3001/user/register",
+        "http://localhost:3001/user/login",
         data
       );
       console.log(createUser);
@@ -43,15 +43,15 @@ const Form = () => {
           />
         )}
       />
-      <Typography>Phn No</Typography>
+      <Typography>Email</Typography>
       <Controller
-        name="phn_no"
+        name="email"
         control={control}
         render={({ field }) => (
           <TextField
             {...field}
-            error={!!errors.phn_no}
-            helperText={errors.phn_no?.message}
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
         )}
       />
