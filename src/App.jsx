@@ -4,6 +4,7 @@ import Form from './components/Form.jsx';
 import Error from './components/Error.jsx';
 import Admin from './components/Admin.jsx';
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import SidebarWithContent from './components/SidebarComponent.jsx';
 
 
 
@@ -46,15 +47,18 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Form />,
-  },
-  {
-    path: '/admin',
-    element: <Admin />,
-  },
-  {
-    path: '/error',
-    element: <Error />,
+    element: <SidebarWithContent />, 
+    children: [
+      {
+        path: '/',
+        element: <Form />,
+      },
+      {
+        path: '/admin',
+        element: <Admin />,
+      },
+    ],
+    errorElement: <Error />,
   },
 ]);
 
