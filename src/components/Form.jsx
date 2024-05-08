@@ -1,4 +1,4 @@
-import { Button, TextField, Typography, Box } from "@mui/material";
+import { Button, TextField, Typography, Box, Grid } from "@mui/material";
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
@@ -30,19 +30,15 @@ const Form = () => {
     }
   };
   return (
+    <Box my={2} >
+      <Box  display='flex' justifyContent='center'>
+        <Typography variant="h3"> Login</Typography>
+      </Box>
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Typography>Name</Typography>
-      <Controller
-        name="name"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            error={!!errors.name}
-            helperText={errors.name?.message}
-          />
-        )}
-      />
+      <Grid container spacing={2} display='flex' justifyContent='center' alignItems='center'>
+      
+      
+      <Grid item xs={12} sm={12} md={6} lg={12}>
       <Typography>Email</Typography>
       <Controller
         name="email"
@@ -55,6 +51,8 @@ const Form = () => {
           />
         )}
       />
+      </Grid>
+      <Grid item xs={12} sm={12} md={6} lg={12}>
       <Typography>Password</Typography>
       <Controller
         name="password"
@@ -67,10 +65,13 @@ const Form = () => {
           />
         )}
       />
+      </Grid>
+      </Grid>
       <Box mt={3}>
         <Button type="submit">Submit</Button>
       </Box>
     </form>
+    </Box>
   );
 };
 
