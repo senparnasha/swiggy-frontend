@@ -1,61 +1,29 @@
 
 
-import Form from './components/Form.jsx';
+import Login from './components/Login.jsx';
 import Error from './components/Error.jsx';
 import Admin from './components/Admin.jsx';
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import SidebarWithContent from './components/SidebarComponent.jsx';
-
-
-
-// const AppLayout = () => {
-//   return (
-//     <div >
-//      <Header/>
-//       <Outlet />
-//     </div>
-//   );
-// };
-
-// const appRouter = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <AppLayout />,
-//     children: [
-//       {
-//         path: "/",
-//         element: <Form />,
-//       },
-//       {
-//         path: "/admin",
-//         element: <Admin />,
-//       },
-     
-//     ],
-//     errorElement: <Error />,
-//   },
-// ]);
-// const root = ReactDOM.createRoot(document.getElementById("root"));
-// root.render(<RouterProvider router={appRouter} />);
-
-
-// export default AppLayout;
-
-
+import ViewResturents from './components/ViewResturents.jsx';
 
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <Login/>
+  },
+  {
+    path: '/admin',
     element: <SidebarWithContent />, 
     children: [
       {
-        path: '/',
-        element: <Form />,
+        path: '/admin/resturent',
+        element: <Admin />,
       },
       {
-        path: '/admin',
-        element: <Admin />,
+        path: '/admin/resturent/viewall',
+        element: <ViewResturents />,
       },
     ],
     errorElement: <Error />,

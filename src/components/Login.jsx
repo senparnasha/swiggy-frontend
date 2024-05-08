@@ -10,7 +10,7 @@ let userSchema = yup.object({
   email: yup.string().required("Phone number is required"),
   password: yup.string().required("password is required"),
 });
-const Form = () => {
+const Login = () => {
   const {
     control,
     handleSubmit,
@@ -75,4 +75,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default Login;
