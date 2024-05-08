@@ -17,6 +17,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Outlet, Link } from 'react-router-dom';
+import { useState } from 'react';
 
 
 const drawerWidth = 240;
@@ -25,6 +26,7 @@ function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
+  const [heading, setHeading]=useState('Register Resturent')
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -46,7 +48,7 @@ function ResponsiveDrawer(props) {
       <Toolbar />
       <Divider />
       <List>
-      <Link to="/admin/resturent" style={{textDecoration:'none', color:'#000'}}>
+      <Link to="/admin/resturent" style={{textDecoration:'none', color:'#000'}} onClick={()=>{setHeading("Register Resturent")}}>
           <ListItem key={"Register Resturent"} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -56,7 +58,7 @@ function ResponsiveDrawer(props) {
             </ListItemButton>
           </ListItem>
           </Link>
-          <Link to="/admin/resturent/viewall" style={{textDecoration:'none', color:'#000'}}>
+          <Link to="/admin/resturent/viewall" style={{textDecoration:'none', color:'#000'}} onClick={()=>{setHeading("View Resturents")}}>
           <ListItem key={"View Resturents"} disablePadding>
             <ListItemButton>
               <ListItemIcon>
@@ -95,7 +97,7 @@ function ResponsiveDrawer(props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+           {heading}
           </Typography>
         </Toolbar>
       </AppBar>
