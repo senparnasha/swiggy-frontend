@@ -2,17 +2,18 @@ import { useEffect, useState } from "react";
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { IconButton } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton, Snackbar } from "@mui/material";
 import DeleteModal from "./modal/DeleteModal";
-
-
+import MuiAlert from "@mui/material/Alert";
 
 export default function ViewResturents() {
   const [rows, setRows] = useState([]);
-  const [open,setOpen]= useState(false)
-
+  const [open, setOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const columns = [
     {
@@ -73,43 +74,66 @@ export default function ViewResturents() {
       },
     },
   ];
-  
-  const handleEdit=()=>{
-  
-  }
-  
-  const handleDelete=()=>{
-    console.log("modal")
-    setOpen(true)
-  }
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/resturent/view/all"
+      );
+      console.log("data", response.data.rows);
 
+      let rowData = response.data.rows;
+
+      let filteredData = rowData.map((row, index) => {
+        return { ...row, sl_no: index + 1 };
+      });
+
+      setRows(filteredData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleEdit = () => {};
+
+  const handleDelete = (id) => {
+    // console.log(id)
+    setSelectedRow(id);
+    setOpen(true);
+  };
+
+  const deleteRow = async () => {
+    try {
+      let payload = {
+        id: selectedRow,
+      };
+
+      await axios.post("http://localhost:3001/resturent/delete", payload);
+      setSnackbarMessage({
+        msg: "Restaurant Deleted successfully",
+        status: "success",
+      });
+      setOpenSnackbar(true);
+      fetchData();
+    } catch (error) {
+      console.log("Error deleting Restaurants", error.response.data.Error);
+      setSnackbarMessage({ msg: error.response.data.Error, status: "error" });
+      setOpenSnackbar(true);
+    } finally {
+      setOpen(false);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:3001/resturent/view/all"
-        );
-        console.log("data", response.data.rows);
-
-        let rowData = response.data.rows;
-
-        let filteredData = rowData.map((row, index) => {
-          return { ...row, sl_no: index + 1 };
-        });
-
-        setRows(filteredData)
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     fetchData();
   }, []);
 
   return (
-    <div style={{  width: "100%" }}>
+    <div style={{ width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -120,8 +144,28 @@ export default function ViewResturents() {
         }}
         pageSizeOptions={[5, 10]}
       />
-      <DeleteModal open={open} handleClose={()=>setOpen(false)}/>
-    
+      <DeleteModal
+        open={open}
+        handleClose={() => setOpen(false)}
+        deleteRow={() => {
+          deleteRow();
+        }}
+      />
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={handleCloseSnackbar}
+          severity={snackbarMessage.status}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage.msg}
+        </MuiAlert>
+      </Snackbar>
     </div>
   );
 }
