@@ -4,9 +4,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton, Snackbar } from "@mui/material";
+import { Button, IconButton, Snackbar, Box, Collapse } from "@mui/material";
 import DeleteModal from "./modal/DeleteModal";
 import MuiAlert from "@mui/material/Alert";
+import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
+import AddEdit from "./AddEdit";
 
 export default function ViewResturents() {
   const [rows, setRows] = useState([]);
@@ -14,6 +16,7 @@ export default function ViewResturents() {
   const [selectedRow, setSelectedRow] = useState("");
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [collapseOpen, setCollapseOpen] = useState(false);
 
   const columns = [
     {
@@ -94,7 +97,9 @@ export default function ViewResturents() {
     }
   };
 
-  const handleEdit = () => {};
+  const handleEdit = () => {
+    setCollapseOpen((prev) => !prev);
+  };
 
   const handleDelete = (id) => {
     // console.log(id)
@@ -131,41 +136,62 @@ export default function ViewResturents() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  const toggleEdit = () => {
+    setCollapseOpen((prev) => !prev);
+  };
   return (
-    <div style={{ width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 100 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-      />
-      <DeleteModal
-        open={open}
-        handleClose={() => setOpen(false)}
-        deleteRow={() => {
-          deleteRow();
-        }}
-      />
+    <>
+      <Box>
+        <Box display="flex" justifyContent="right" my={4}>
+          <Button
+            startIcon={<AddCircleOutlinedIcon />}
+            variant="contained"
+            onClick={() => setCollapseOpen((prev) => !prev)}
+          >
+            Add
+          </Button>
+        </Box>
+        <Box mt={2}>
+          <Collapse in={collapseOpen}>
+            <AddEdit toggleEdit={toggleEdit} />
+          </Collapse>
+        </Box>
 
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <MuiAlert
-          onClose={handleCloseSnackbar}
-          severity={snackbarMessage.status}
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage.msg}
-        </MuiAlert>
-      </Snackbar>
-    </div>
+        <Box style={{ width: "100%" }} mt={3}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 100 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+          />
+          <DeleteModal
+            open={open}
+            handleClose={() => setOpen(false)}
+            deleteRow={() => {
+              deleteRow();
+            }}
+          />
+
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={6000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <MuiAlert
+              onClose={handleCloseSnackbar}
+              severity={snackbarMessage.status}
+              sx={{ width: "100%" }}
+            >
+              {snackbarMessage.msg}
+            </MuiAlert>
+          </Snackbar>
+        </Box>
+      </Box>
+    </>
   );
 }
