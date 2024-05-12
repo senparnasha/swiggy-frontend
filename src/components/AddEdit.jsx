@@ -21,7 +21,7 @@ const schema = yup.object().shape({
   costing:yup.string().required("Costing is required"),
 });
 
-const AddEdit = ({ toggleEdit }) => {
+const AddEdit = ({ toggleEdit, name, address, phnNo, costing }) => {
   const {
     control,
     handleSubmit,
@@ -50,6 +50,7 @@ const AddEdit = ({ toggleEdit }) => {
                 {...field}
                 id="outlined-basic"
                 variant="outlined"
+                value={name}
                 fullWidth
                 placeholder="Resturent Name"
                 error={!!errors.resturentName}
@@ -71,6 +72,7 @@ const AddEdit = ({ toggleEdit }) => {
                 {...field}
                 id="outlined-basic"
                 variant="outlined"
+                value={address}
                 fullWidth
                 placeholder="address"
                 error={!!errors.address}
@@ -92,6 +94,7 @@ const AddEdit = ({ toggleEdit }) => {
                 {...field}
                 id="outlined-basic"
                 variant="outlined"
+                value={phnNo}
                 fullWidth
                 placeholder="Phone Number"
                 error={!!errors.phoneNum}
@@ -113,6 +116,7 @@ const AddEdit = ({ toggleEdit }) => {
                 {...field}
                 id="outlined-basic"
                 variant="outlined"
+                value={costing}
                 fullWidth
                 placeholder="Costing"
                 error={!!errors.costing}

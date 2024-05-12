@@ -17,6 +17,11 @@ export default function ViewResturents() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [collapseOpen, setCollapseOpen] = useState(false);
+  const [name,setName] = useState("")
+  const [address, setAddress] = useState("")
+  const [phnNo, setPhnNo] = useState("")
+  const [costing, setCosting] = useState("")
+
 
   const columns = [
     {
@@ -65,7 +70,7 @@ export default function ViewResturents() {
         return (
           <div>
             {/* Edit icon */}
-            <IconButton onClick={() => handleEdit(params.row.id)}>
+            <IconButton onClick={() => handleEdit(params)}>
               <EditIcon />
             </IconButton>
             {/* Delete icon */}
@@ -97,7 +102,13 @@ export default function ViewResturents() {
     }
   };
 
-  const handleEdit = () => {
+  const handleEdit = (params) => {
+    console.log("hhhh",params)
+    setName(params.row.name)
+    setAddress(params.row.address)
+    setPhnNo(params.row.phn_no)
+    setCosting(params.row.costing)
+
     setCollapseOpen((prev) => !prev);
   };
 
@@ -146,14 +157,19 @@ export default function ViewResturents() {
           <Button
             startIcon={<AddCircleOutlinedIcon />}
             variant="contained"
-            onClick={() => setCollapseOpen((prev) => !prev)}
+            onClick={() => {
+              setName("")
+              setAddress("")
+              setPhnNo("")
+              setCosting("")
+              setCollapseOpen((prev) => !prev)}}
           >
             Add
           </Button>
         </Box>
         <Box mt={2}>
           <Collapse in={collapseOpen}>
-            <AddEdit toggleEdit={toggleEdit} />
+            <AddEdit name={name}  address={address} phnNo={phnNo} costing={costing}   toggleEdit={toggleEdit} />
           </Collapse>
         </Box>
 
