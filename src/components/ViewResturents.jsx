@@ -17,11 +17,11 @@ export default function ViewResturents() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [collapseOpen, setCollapseOpen] = useState(false);
-  const [name,setName] = useState("")
-  const [address, setAddress] = useState("")
-  const [phnNo, setPhnNo] = useState("")
-  const [costing, setCosting] = useState("")
-
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phnNo, setPhnNo] = useState("");
+  const [costing, setCosting] = useState("");
+  const [resturentId, setResturentId] = useState("");
 
   const columns = [
     {
@@ -103,17 +103,46 @@ export default function ViewResturents() {
   };
 
   const handleEdit = (params) => {
-    console.log("hhhh",params)
-    setName(params.row.name)
-    setAddress(params.row.address)
-    setPhnNo(params.row.phn_no)
-    setCosting(params.row.costing)
+    console.log("hhhh", params);
+    setResturentId(params.row.id);
+    setName(params.row.name);
+    setAddress(params.row.address);
+    setPhnNo(params.row.phn_no);
+    setCosting(params.row.costing);
+    console.log(params.row);
 
     setCollapseOpen((prev) => !prev);
   };
 
+  const editRow = async (id, name, address, phnNo, costing) => {
+    console.log("called", id, name, address, phnNo, costing);
+
+    try {
+      let payload = {
+        id: id,
+        name: name,
+        address: address,
+        phnNo: phnNo,
+        costing: costing,
+      };
+
+      await axios.post("http://localhost:3001/resturent/edit", payload);
+      setSnackbarMessage({
+        msg: "Restaurant Edited successfully",
+        status: "success",
+      });
+      setOpenSnackbar(true);
+      fetchData();
+    } catch (error) {
+      console.log("Error Editing Restaurants", error.response.data.Error);
+      setSnackbarMessage({ msg: error.response.data.Error, status: "error" });
+      setOpenSnackbar(true);
+    } finally {
+      setOpen(false);
+    }
+  };
+
   const handleDelete = (id) => {
-    // console.log(id)
     setSelectedRow(id);
     setOpen(true);
   };
@@ -158,18 +187,29 @@ export default function ViewResturents() {
             startIcon={<AddCircleOutlinedIcon />}
             variant="contained"
             onClick={() => {
-              setName("")
-              setAddress("")
-              setPhnNo("")
-              setCosting("")
-              setCollapseOpen((prev) => !prev)}}
+              setName("");
+              setAddress("");
+              setPhnNo("");
+              setCosting("");
+              setCollapseOpen((prev) => !prev);
+            }}
           >
             Add
           </Button>
         </Box>
         <Box mt={2}>
           <Collapse in={collapseOpen}>
-            <AddEdit name={name}  address={address} phnNo={phnNo} costing={costing}   toggleEdit={toggleEdit} />
+            <AddEdit
+              id={resturentId}
+              name={name}
+              address={address}
+              phnNo={phnNo}
+              costing={costing}
+              editRow={(id, name, address, phnNo, costing) => {
+                editRow(id, name, address, phnNo, costing);
+              }}
+              toggleEdit={toggleEdit}
+            />
           </Collapse>
         </Box>
 
