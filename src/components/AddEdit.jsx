@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Typography, Grid, TextField, Box, Button } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -15,12 +15,19 @@ const AddEdit = ({
   costing,
   editRow,
 }) => {
-  const defaultValues = {
-    resturentName: name,
-    address: address,
-    phoneNum: phnNo,
-    costing: costing,
-  };
+  // const defaultValues = {
+  //   resturentName: name,
+  //   address: address,
+  //   phoneNum: phnNo,
+  //   costing: costing,
+  // };
+
+  useEffect(()=>{
+    setValue("resturentName", name)
+    setValue("address", address)
+    setValue("phoneNum", phnNo)
+    setValue("costing", costing)
+  })
 
   const schema = yup.object().shape({
     resturentName: yup.string().required("Resturent Name is required"),
@@ -33,7 +40,8 @@ const AddEdit = ({
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema), defaultValues: defaultValues });
+    setValue,
+  } = useForm({ resolver: yupResolver(schema)});
 
   const onSubmit = (data) => {
     console.log(data);
@@ -60,7 +68,7 @@ const AddEdit = ({
                   {...field}
                   id="outlined-basic"
                   variant="outlined"
-                  //   value={name}
+                  // defaultValue={"name"}
                   fullWidth
                   placeholder="Resturent Name"
                   error={!!errors.resturentName}
