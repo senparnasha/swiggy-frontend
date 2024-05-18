@@ -2,11 +2,13 @@
 
 import Login from './components/Login.jsx';
 import Error from './components/Error.jsx';
-import Admin from './components/RegisterResturent.jsx';
+
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import SidebarWithContent from './components/SidebarComponent.jsx';
 import ViewResturents from './components/ViewResturents.jsx';
 import RegisterResturent from './components/RegisterResturent.jsx';
+
+import ResturentDetails from './components/ResturentDetails.jsx';
 
 
 const router = createBrowserRouter([
@@ -25,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/admin/resturent/viewall',
         element: <ViewResturents />,
+      },
+      {
+        path: '/admin/resturent/view/:id',
+        element: <ResturentDetails />,
       },
     ],
     errorElement: <Error />,

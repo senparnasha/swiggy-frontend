@@ -4,11 +4,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button, IconButton, Snackbar, Box, Collapse } from "@mui/material";
 import DeleteModal from "./modal/DeleteModal";
 import MuiAlert from "@mui/material/Alert";
 import AddCircleOutlinedIcon from "@mui/icons-material/AddCircleOutlined";
 import AddEdit from "./AddEdit";
+import { useNavigate } from "react-router";
 
 export default function ViewResturents() {
   const [rows, setRows] = useState([]);
@@ -22,6 +24,8 @@ export default function ViewResturents() {
   const [phnNo, setPhnNo] = useState("");
   const [costing, setCosting] = useState("");
   const [resturentId, setResturentId] = useState("");
+
+  const navigate=useNavigate()
 
   const columns = [
     {
@@ -77,6 +81,9 @@ export default function ViewResturents() {
             <IconButton onClick={() => handleDelete(params.row.id)}>
               <DeleteIcon />
             </IconButton>
+            <IconButton onClick={() => handleView(params)}>
+              <VisibilityIcon />
+            </IconButton>
           </div>
         );
       },
@@ -101,6 +108,12 @@ export default function ViewResturents() {
       console.error("Error fetching data:", error);
     }
   };
+
+
+const handleView=(params)=>{
+  console.log("view",params.row)
+  navigate(`/admin/resturent/view/${params.row.id}`)
+}
 
   const handleEdit = (params) => {
     console.log("hhhh", params);
