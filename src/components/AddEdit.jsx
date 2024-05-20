@@ -6,6 +6,14 @@ import * as yup from "yup";
 
 // import PropTypes from 'prop-types';
 
+
+const schema = yup.object().shape({
+  resturentName: yup.string().required("Resturent Name is required"),
+  address: yup.string().required("Resturent Address is required"),
+  phoneNum: yup.string().required("Resturent Phone Number is required"),
+  costing: yup.string().required("Costing is required"),
+});
+
 const AddEdit = ({
   toggleEdit,
   id,
@@ -21,35 +29,44 @@ const AddEdit = ({
   //   phoneNum: phnNo,
   //   costing: costing,
   // };
-
-  useEffect(()=>{
-    setValue("resturentName", name)
-    setValue("address", address)
-    setValue("phoneNum", phnNo)
-    setValue("costing", costing)
-  })
-
-  const schema = yup.object().shape({
-    resturentName: yup.string().required("Resturent Name is required"),
-    address: yup.string().required("Resturent Address is required"),
-    phoneNum: yup.string().required("Resturent Phone Number is required"),
-    costing: yup.string().required("Costing is required"),
-  });
+  
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm({ resolver: yupResolver(schema)});
+  } = useForm({ resolver: yupResolver(schema), defaultValues:{
+    resturentName:name,
+    address:address,
+    phoneNum: phnNo,
+    costing: costing
+  }});
+
 
   const onSubmit = (data) => {
     console.log(data);
+    editRow(data);
+
+    setValue("id", "")
+    setValue("resturentName", "")
+    setValue("address", "")
+    setValue("phoneNum", "")
+    setValue("costing", "")
   };
 
-  const handleEdit = () => {
-    editRow(id, name, address, phnNo, costing);
-  };
+  
+  useEffect(()=>{
+    setValue("id", id)
+    setValue("resturentName", name)
+    setValue("address", address)
+    setValue("phoneNum", phnNo)
+    setValue("costing", costing)
+  },[id, name,
+    address,
+    phnNo,
+    costing,])
+
 
   return (
     <Box sx={{ backgroundColor: "#ecf8ff" }} px={3} py={3}>
@@ -150,7 +167,7 @@ const AddEdit = ({
             {" "}
             Cancel{" "}
           </Button>
-          <Button variant="contained" type="submit" onClick={handleEdit}>
+          <Button variant="contained" type="submit" >
             {" "}
             Confirm{" "}
           </Button>{" "}

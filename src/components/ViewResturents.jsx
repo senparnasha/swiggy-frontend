@@ -127,16 +127,16 @@ const handleView=(params)=>{
     setCollapseOpen((prev) => !prev);
   };
 
-  const editRow = async (id, name, address, phnNo, costing) => {
-    console.log("called", id, name, address, phnNo, costing);
+  const editRow = async (data) => {
+    console.log("called data", data);
 
     try {
       let payload = {
-        id: id,
-        name: name,
-        address: address,
-        phnNo: phnNo,
-        costing: costing,
+        id: data.id,
+        name: data.resturentName,
+        address: data.address,
+        phn_no: data.phoneNum,
+        costing: data.costing,
       };
 
       await axios.post("http://localhost:3001/resturent/edit", payload);
@@ -218,8 +218,8 @@ const handleView=(params)=>{
               address={address}
               phnNo={phnNo}
               costing={costing}
-              editRow={(id, name, address, phnNo, costing) => {
-                editRow(id, name, address, phnNo, costing);
+              editRow={(data) => {
+                editRow(data);
               }}
               toggleEdit={toggleEdit}
             />
