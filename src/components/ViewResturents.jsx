@@ -200,6 +200,7 @@ const handleView=(params)=>{
             startIcon={<AddCircleOutlinedIcon />}
             variant="contained"
             onClick={() => {
+              setResturentId("");
               setName("");
               setAddress("");
               setPhnNo("");

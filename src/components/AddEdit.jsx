@@ -70,7 +70,8 @@ const AddEdit = ({
 
   return (
     <Box sx={{ backgroundColor: "#ecf8ff" }} px={3} py={3}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+  <h2>{id ? "Edit Resturent": "Add Resturent"}</h2>
+      <form onSubmit={handleSubmit(onSubmit)} mt={1}>
         <Grid container columnSpacing={3}>
           <Grid item xs={12} sm={12} md={4} lg={6} my={1}>
             <Typography fontWeight={700} mb={1}>
