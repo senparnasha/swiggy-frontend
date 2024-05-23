@@ -1,26 +1,107 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Typography, Grid, TextField, Box, Button } from "@mui/material";
+import { Typography, Grid, TextField, Box, Button, CardActionArea, IconButton } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import { useParams } from "react-router";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { DataGrid } from "@mui/x-data-grid";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const schema = yup.object().shape({
-  resturentName: yup.string().required("Resturent Name is required"),
-  address: yup.string().required("Resturent Address is required"),
-  phoneNum: yup.string().required("Resturent Phone Number is required"),
-  costing: yup.string().required("Costing is required"),
-});
+
+
+// const schema = yup.object().shape({
+//   resturentName: yup.string().required("Resturent Name is required"),
+//   address: yup.string().required("Resturent Address is required"),
+//   phoneNum: yup.string().required("Resturent Phone Number is required"),
+//   costing: yup.string().required("Costing is required"),
+// });
 
 function ResturentDetails() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm({ resolver: yupResolver(schema) });
+  // const {
+  //   control,
+  //   handleSubmit,
+  //   formState: { errors },
+  //   setValue,
+  // } = useForm({ resolver: yupResolver(schema) });
+
+
+  const [resturentName, setResturentName] = useState("")
+  const [resturentAddress, setResturentAddress] = useState("")
+  const [phnNo, setPhnNo] = useState("")
+  const [costing, setCosting] = useState("")
+  const [rows, setRows]= useState([])
+
+
+
+
+  const columns = [
+    {
+      field: "sl_no",
+      headerName: "Sl. No",
+      width: 130,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      width: 130,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "category",
+      headerName: "Category",
+      width: 90,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      width: 160,
+      align: "center",
+      headerAlign: "center",
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 150,
+      align: "center",
+      headerAlign: "center",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <div>
+            {/* Edit icon */}
+            <IconButton onClick={() => handleEdit(params)}>
+              <EditIcon />
+            </IconButton>
+            {/* Delete icon */}
+            <IconButton onClick={() => handleDelete(params.row.id)}>
+              <DeleteIcon />
+            </IconButton>
+           
+          </div>
+        );
+      },
+    },
+  ];
+
+const handleEdit=()=>{
+
+}
+
+const handleDelete=()=>{
+  
+}
+
+
 
   const onSubmit = (data) => {
     console.log(data);
@@ -33,6 +114,7 @@ function ResturentDetails() {
 
   useEffect(() => {
     fetchResturentDetails(id);
+    fetchMenu(id)
   }, []);
 
   const fetchResturentDetails = async (id) => {
@@ -46,21 +128,46 @@ function ResturentDetails() {
         payload
       );
       console.log("data", response.data.data);
-      const { name, address, phn_no, costing } = response.data.data;
-
-      setValue("resturentName", name);
-      setValue("address", address);
-      setValue("phoneNum", phn_no);
-      setValue("costing", costing);
+     const{name, address, phn_no, costing} = response.data.data
+     setResturentName(name)
+     setResturentAddress(address)
+     setPhnNo(phn_no)
+     setCosting(costing)
       
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
  
+
+  const fetchMenu = async (id) => {
+    try {
+      let payload = {
+        res_id: id,
+      };
+      const response = await axios.post(
+        "http://localhost:3001/resturent/menu", payload
+      );
+      // console.log("Menu......", response.data.data);
+      // setRows(response.data.data)
+
+      let rowData = response.data.data;
+
+      let filteredData = rowData.map((row, index) => {
+        return { ...row, sl_no: index + 1 };
+      });
+
+      setRows(filteredData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+
+
   return (
-    <div>
-      <Box sx={{ backgroundColor: "#ecf8ff" }} px={3} py={3}>
+    <>
+      {/* <Box sx={{ backgroundColor: "#ecf8ff" }} px={3} py={3}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container columnSpacing={3}>
             <Grid item xs={12} sm={12} md={4} lg={6} my={1}>
@@ -98,7 +205,7 @@ function ResturentDetails() {
                     {...field}
                     id="outlined-basic"
                     variant="outlined"
-                    //   defaultValue={address}
+                   
                     fullWidth
                     placeholder="address"
                     error={!!errors.address}
@@ -120,7 +227,7 @@ function ResturentDetails() {
                     {...field}
                     id="outlined-basic"
                     variant="outlined"
-                    //   defaultValue={phnNo}
+                  
                     fullWidth
                     placeholder="Phone Number"
                     error={!!errors.phoneNum}
@@ -142,7 +249,7 @@ function ResturentDetails() {
                     {...field}
                     id="outlined-basic"
                     variant="outlined"
-                    //   defaultValue={costing}
+                   
                     fullWidth
                     placeholder="Costing"
                     error={!!errors.costing}
@@ -151,7 +258,7 @@ function ResturentDetails() {
                 )}
               />
             </Grid>
-            {/* next row */}
+          
           </Grid>{" "}
           <Box display="flex" justifyContent="right" gap={2} my={1}>
             <Button variant="outlined"> Cancel </Button>
@@ -161,8 +268,40 @@ function ResturentDetails() {
             </Button>{" "}
           </Box>
         </form>
-      </Box>
-    </div>
+      </Box> */}
+       <Card fullWidth sx={{backgroundColor:"#f0f3f7"}}>
+      <CardActionArea>
+        
+        <CardContent>
+          <Typography gutterBottom variant="h3" component="div">
+     {resturentName}
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+          Address: <Typography variant="bod2">{resturentAddress}</Typography>
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+          Contact Us: <Typography variant="span">{phnNo}</Typography>
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+          Costing: <Typography variant="span">{costing}</Typography>
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+     
+    </Card>
+    <Box style={{ width: "100%" }} mt={3}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 100 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+          />
+          </Box>
+    </>
   );
 }
 

@@ -64,7 +64,7 @@ function ResponsiveDrawer(props) {
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-             <ListItemText primary={"View Resturents"} />
+             <ListItemText primary={"Resturents"} />
             </ListItemButton>
           </ListItem>
           </Link>
