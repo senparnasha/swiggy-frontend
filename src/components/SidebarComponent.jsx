@@ -48,16 +48,7 @@ function ResponsiveDrawer(props) {
       <Toolbar />
       <Divider />
       <List>
-      <Link to="/admin/resturent" style={{textDecoration:'none', color:'#000'}} onClick={()=>{setHeading("Register Resturent")}}>
-          <ListItem key={"Register Resturent"} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-             <ListItemText primary={"Register Resturent"} />
-            </ListItemButton>
-          </ListItem>
-          </Link>
+     
           <Link to="/admin/resturent/viewall" style={{textDecoration:'none', color:'#000'}} onClick={()=>{setHeading("View Resturents")}}>
           <ListItem key={"View Resturents"} disablePadding>
             <ListItemButton>

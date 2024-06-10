@@ -40,6 +40,8 @@ function ResturentDetails() {
   //   setValue,
   // } = useForm({ resolver: yupResolver(schema) });
 
+
+
   const [resturentName, setResturentName] = useState("");
   const [resturentAddress, setResturentAddress] = useState("");
   const [phnNo, setPhnNo] = useState("");
@@ -48,6 +50,11 @@ function ResturentDetails() {
   const [collapseOpen, setCollapseOpen] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [resturentId, setResturentId]= useState("")
+
+  const params = useParams();
+  const resId = params.id;
+  console.log("iffff", resId);
 
   const columns = [
     {
@@ -93,7 +100,7 @@ function ResturentDetails() {
               <EditIcon />
             </IconButton>
             {/* Delete icon */}
-            <IconButton onClick={() => handleDelete(params.row.id)}>
+            <IconButton onClick={() => handleDeleteMenu(params.row.id)}>
               <DeleteIcon />
             </IconButton>
           </div>
@@ -104,7 +111,33 @@ function ResturentDetails() {
 
   const handleEdit = () => {};
 
-  const handleDelete = () => {};
+  // const handleDelete = (id) => {
+  //   console.log("clicked", id)
+  //   setResturentId(id)
+  // };
+
+
+  const handleDeleteMenu = async (eachMenuId) => {
+    console.log("menu id", eachMenuId)
+    try {
+      let payload = {
+        id: eachMenuId,
+      };
+
+      await axios.post("http://localhost:3001/resturent/menu/delete", payload);
+      setSnackbarMessage({
+        msg: "Menu Deleted successfully",
+        status: "success",
+      });
+      setOpenSnackbar(true);
+      fetchMenu(resId);
+    } catch (error) {
+      console.log("Error deleting Menu", error.response.data.Error);
+      setSnackbarMessage({ msg: error.response.data.Error, status: "error" });
+      setOpenSnackbar(true);
+    }
+  };
+
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
@@ -114,21 +147,20 @@ function ResturentDetails() {
     console.log(data);
   };
 
-  const params = useParams();
 
-  const id = params.id;
-  console.log("iffff", id);
+
+  
 
   useEffect(() => {
-    fetchResturentDetails(id);
-    fetchMenu(id);
+    fetchResturentDetails(resId);
+    fetchMenu(resId);
   }, []);
 
-  const fetchResturentDetails = async (id) => {
-    console.log("llllll", id);
+  const fetchResturentDetails = async (resId) => {
+  
     try {
       let payload = {
-        id: id,
+        id: resId,
       };
       const response = await axios.post(
         "http://localhost:3001/resturent/view/resturent",
@@ -145,10 +177,10 @@ function ResturentDetails() {
     }
   };
 
-  const fetchMenu = async (id) => {
+  const fetchMenu = async (resId) => {
     try {
       let payload = {
-        res_id: id,
+        res_id: resId,
       };
       const response = await axios.post(
         "http://localhost:3001/resturent/menu",
@@ -182,7 +214,7 @@ function ResturentDetails() {
         status: "success",
       });
       setOpenSnackbar(true);
-      fetchMenu(id);
+      fetchMenu(resId);
     } catch (error) {
       console.log("Error creating Menu", error.response.data.Error);
       setSnackbarMessage({ msg: error.response.data.Error, status: "error" });
@@ -334,7 +366,7 @@ function ResturentDetails() {
           <AddEditMenu
             toggleEdit={toggleEdit}
             createMenu={(data) => handleCreateMenu(data)}
-            res_id={id}
+            res_id={resId}
           />
         </Collapse>
       </Box>

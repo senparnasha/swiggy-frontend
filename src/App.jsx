@@ -6,7 +6,7 @@ import Error from './components/Error.jsx';
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import SidebarWithContent from './components/SidebarComponent.jsx';
 import ViewResturents from './components/ViewResturents.jsx';
-import RegisterResturent from './components/RegisterResturent.jsx';
+
 
 import ResturentDetails from './components/ResturentDetails.jsx';
 
@@ -20,10 +20,7 @@ const router = createBrowserRouter([
     path: '/admin',
     element: <SidebarWithContent />, 
     children: [
-      {
-        path: '/admin/resturent',
-        element: <RegisterResturent />,
-      },
+    
       {
         path: '/admin/resturent/viewall',
         element: <ViewResturents />,

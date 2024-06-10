@@ -28,12 +28,14 @@ const AddEditMenu = ({
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm({ resolver: yupResolver(schema), 
   });
 
 
   useEffect(()=>{
     setValue("res_id", res_id)
+
    
   },[res_id])
 
@@ -43,6 +45,12 @@ const AddEditMenu = ({
   const onSubmit = async (data) => {
     console.log(data);
    createMenu(data)
+   reset({
+    name:"",
+    category:"",
+    price:"",
+    
+   });
   };
 
  
@@ -93,6 +101,7 @@ const AddEditMenu = ({
                   placeholder="Menu Name"
                   error={!!errors.name}
                   helperText={errors.name?.message}
+                   defaultValue=""
                 />
               )}
             />
@@ -115,6 +124,7 @@ const AddEditMenu = ({
                   placeholder="category"
                   error={!!errors.category}
                   helperText={errors.category?.message}
+                   defaultValue=""
                 />
               )}
             />
@@ -137,6 +147,7 @@ const AddEditMenu = ({
                   placeholder="Price"
                   error={!!errors.price}
                   helperText={errors.price?.message}
+                   defaultValue=""
                 />
               )}
             />
